@@ -22,5 +22,7 @@ export default class Root {
     /**
      * a function that initializes the modules injection structure of the application
      * */
-    initialize() {}
+    initialize() {
+        // so to start we are going to need to get the meta data of the classes that have been decorated
+    }
 }
