@@ -1,0 +1,23 @@
+{
+  "root": true,
+
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": ["error", 4],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "max-len": [
+      "error",
+      {
+        "code": 120
+      }
+    ]
+  }
+}
