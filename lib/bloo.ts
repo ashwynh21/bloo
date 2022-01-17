@@ -13,14 +13,21 @@
 import http from 'http';
 import https from 'https';
 import express from './express';
+import root from './root';
 
 export class Bloo {
     private readonly server: http.Server | https.Server;
     private readonly express: ReturnType<typeof express>;
 
+    // we define a property that will allow us to manage the injection environment of the application
+    private root = new root(this);
+
     constructor(private options?: Partial<Options>) {
         this.express = express(options);
         this.server = http.createServer(this.express);
+
+        // so we are going to need to make sure that before the listen function is called that we are able to init
+        // the modules and tree structure within the instance root property.
     }
 
     /**
@@ -49,7 +56,7 @@ export class Bloo {
     /**
      * To stop the application serer from running and pretty much stop the application
      * */
-    async close() {
+    close() {
         return this.server.close();
     }
 
@@ -58,7 +65,7 @@ export class Bloo {
      *
      * @param callback: (bloo: Bloo) => void - the callback function that the method is going to call
      * */
-    use(callback: Callable) {
+    run(callback: Callable) {
         callback(this);
 
         return this;
@@ -75,4 +82,6 @@ interface Options {
     // specify the kind of server that you would like to use. i.e. express, koa, or otherwise
     limit: `${number}${'kb' | 'mb' | 'gb'}`;
 }
+
+// we define the types that will be local for the class definition
 type Callable = (bloo: Bloo) => void;
