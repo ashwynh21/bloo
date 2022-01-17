@@ -19,10 +19,8 @@ describe('Module', () => {
         })
         class Test {}
 
-        const options = Reflect.getOwnMetadata('options', Test);
+        const test = new Test();
 
-        expect(options.modules).to.not.be.undefined;
-        expect(options.controllers).to.not.be.undefined;
-        expect(options.name).to.be.equal('test');
+        expect(test).to.not.be.undefined;
     });
 });

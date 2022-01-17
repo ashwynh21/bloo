@@ -15,7 +15,7 @@ export interface Module {
     name?: string;
 
     // so a module should have other module children arranged in a list
-    modules?: Array<Module>;
+    modules?: Array<Class<Module>>;
 
     // a module will then have a list of controllers that will rollup bind to the root server that runs at the app
     // root
@@ -30,15 +30,22 @@ export interface Module {
  * A decorator that is used on classes. Allows the class to be added to the Bloo injection engine as a Module which
  * will be providing features to the rest of the application
  * */
-export function module<T extends { new (...args: any[]): any }>(options: Module) {
+export function module(options: Module) {
     // so in this decorator we want to redefine the class as an injectable class first. then we want to be able
     // to make it attachable to the application, that means providing the properties above to it so that it can be
     // bound up properly
-    return function (constructor: T) {
-        // so at this point we are going to need to define the constructor as part of the metadata in the decorator
-        // so that we are able to construct the class directly from the metadata.
-        Reflect.defineMetadata('options', options, constructor);
+    return function <T extends Class<Module>>(constructor: T) {
+        return class extends constructor implements Module {
+            name = options.name;
 
-        return constructor;
+            controllers = options.controllers;
+            providers = options.providers;
+            modules = options.modules;
+
+            type = constructor.name;
+        };
     };
 }
+
+// we define some types here
+export type Class<T = any> = { new (...args: any[]): T };

@@ -5,11 +5,11 @@
  * app.
  * */
 import { Bloo } from './bloo';
-import { Module } from './module';
+import { Class, Module } from './module';
 
 export default class Root {
     // we are going to need to define a module array that will be responsible for storing the injection mechanic
-    modules: Array<Module> = [];
+    private modules: Set<Module> = new Set();
 
     /**
      * The class is going to require a context to operate from since it is going to binding the modules and controllers
@@ -19,10 +19,21 @@ export default class Root {
      * */
     constructor(private bloo?: Bloo) {}
 
+    initialize(module: Class<Module>) {
+        // so now we have the module instances in a set. with the structure and the instance set, we should have
+        // a way to traverse and bind the module controllers and providers
+        this.modularize(module);
+        // with the modules initialized into a set we then need to check how we work each modules controller and
+        // such
+    }
     /**
      * a function that initializes the modules injection structure of the application
      * */
-    initialize() {
-        // so to start we are going to need to get the meta data of the classes that have been decorated
+    private modularize(module: Class<Module>) {
+        // we should then push the constructor into the modules property for construction and injection later
+        const instance = new module();
+        this.modules.add(instance);
+
+        (instance.modules ?? []).map((m) => this.modularize(m));
     }
 }

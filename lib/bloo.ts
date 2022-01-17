@@ -14,6 +14,7 @@ import http from 'http';
 import https from 'https';
 import express from './express';
 import root from './root';
+import { Class } from './module';
 
 export class Bloo {
     private readonly server: http.Server | https.Server;
@@ -69,6 +70,13 @@ export class Bloo {
         callback(this);
 
         return this;
+    }
+
+    /**
+     * a function that will run the initialize the root module of the app
+     * */
+    bind(module: Class) {
+        return this.root.initialize(module);
     }
 }
 
