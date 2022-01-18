@@ -9,7 +9,7 @@ import { Class, Module } from './module';
 
 export default class Root {
     // we are going to need to define a module array that will be responsible for storing the injection mechanic
-    private modules: Set<Module> = new Set();
+    private modules: Record<string, Module> = {};
 
     /**
      * The class is going to require a context to operate from since it is going to binding the modules and controllers
@@ -24,16 +24,25 @@ export default class Root {
         // a way to traverse and bind the module controllers and providers
         this.modularize(module);
         // with the modules initialized into a set we then need to check how we work each modules controller and
-        // such
+        // such. but first let us replace the modules with pointers
+        Object.values(this.modules).forEach((m) => {
+            m.modules = m.modules?.map((c) => {
+                return this.modules[c.name] as any;
+            });
+        });
+
+        console.log(this.modules);
     }
     /**
      * a function that initializes the modules injection structure of the application
      * */
     private modularize(module: Class<Module>) {
         // we should then push the constructor into the modules property for construction and injection later
-        const instance = new module();
-        this.modules.add(instance);
+        if (!this.modules[module.name as string]) {
+            const instance = new module();
+            this.modules[module.name as string] = instance;
 
-        (instance.modules ?? []).map((m) => this.modularize(m));
+            (instance.modules ?? []).map((m) => this.modularize(m));
+        }
     }
 }
