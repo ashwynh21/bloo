@@ -6,7 +6,7 @@
  * */
 import { describe, it } from 'mocha';
 import { expect } from 'chai';
-import { module } from '../lib/module';
+import { module } from '../lib';
 
 import Root from '../lib/root';
 

@@ -42,7 +42,7 @@ export function module(options: Module) {
             providers = options.providers;
             modules = options.modules;
 
-            type = constructor.name;
+            type = 'module';
         };
     };
 }

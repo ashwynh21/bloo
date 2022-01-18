@@ -30,8 +30,6 @@ export default class Root {
                 return this.modules[c.name] as any;
             });
         });
-
-        console.log(this.modules);
     }
     /**
      * a function that initializes the modules injection structure of the application
