@@ -6,7 +6,7 @@
  * */
 import { describe, it } from 'mocha';
 import { expect } from 'chai';
-import { module } from '../lib';
+import { injectable, module, Injectable } from '../lib';
 
 import Root from '../lib/root';
 
@@ -47,5 +47,34 @@ describe('Root', () => {
         class B {}
 
         return root.initialize(B);
+    });
+
+    it('should be able to setup and configure the provider classes', () => {
+        @injectable()
+        class B {}
+
+        @module({
+            providers: [B],
+        })
+        class A extends Injectable {}
+
+        const a = new A();
+        // so since the properties are added to the module class, we should expect the instance a to have a property
+        // providers with a class type B as the first element
+        expect(a.providers[0]).to.be.equal(B);
+    });
+
+    it('should be able to work the root instance to run instantiation of providers', () => {
+        const root = new Root();
+
+        @injectable()
+        class B {}
+
+        @module({
+            providers: [B],
+        })
+        class A extends Injectable {}
+
+        root.initialize(A);
     });
 });

@@ -19,3 +19,7 @@ export function injectable(provider?: Provider) {
         };
     };
 }
+
+export class Injectable {
+    providers!: Array<Class>;
+}

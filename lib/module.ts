@@ -19,11 +19,11 @@ export interface Module {
 
     // a module will then have a list of controllers that will rollup bind to the root server that runs at the app
     // root
-    controllers?: Array<Controller>;
+    controllers?: Array<Class<Controller> | Controller>;
 
     // we allow a module to provide services that are injectable to the application root. this will require us to
     // define a decorator that will mark a class as injectable
-    providers?: Array<Provider>;
+    providers?: Array<Class<Provider> | Provider>;
 }
 
 /**
@@ -49,3 +49,7 @@ export function module(options: Module) {
 
 // we define some types here
 export type Class<T = any> = { new (...args: any[]): T };
+
+export class Type {
+    type!: string;
+}
